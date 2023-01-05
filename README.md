@@ -20,13 +20,24 @@ To install mathsteps using npm:
 ```js
 const mathsteps = require('mathsteps');
 
-const steps = mathsteps.simplifyExpression('2x + 2x + x + x');
+let steps = [];
+const newNode = mathsteps.simplifyExpression({
+    expressionAsText: '2x + 2x + x + x',
+    onStepCb: (step) => {
+        steps.push(step);
+
+        /*
+        if (stepMeta.altForms) {
+          console.log('ALT FORM:', mathsteps.printAsTeX(stepMeta.altForms[0].node))
+          console.log(stepMeta.altForms[0].node)
+        }
+        */
+    }
+})
 
 steps.forEach(step => {
-        console.log("before change: " + step.oldNode.toString());   // before change: 2 x + 2 x + x + x
-        console.log("change: " + step.changeType);                  // change: ADD_POLYNOMIAL_TERMS
-        console.log("after change: " + step.newNode.toString());    // after change: 6 x
-        console.log("# of substeps: " + step.substeps.length);      // # of substeps: 3
+        console.log("change: " + step.changeType);                              // change: ADD_POLYNOMIAL_TERMS
+        console.log("after change: " + mathsteps.printAsTeX(step.rootNode));    // after change: 6 x
 });
 ```
 
